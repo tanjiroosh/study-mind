@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Proposal - StudyMind AI</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body { overflow-y: auto; background: #09090b; padding: 40px; color: #f8fafc; }
+        .proposal-container { max-width: 900px; margin: 0 auto; background: rgba(255,255,255,0.03); padding: 40px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.08); }
+        #content h1, #content h2, #content h3 { margin-top: 1.5em; margin-bottom: 0.8em; }
+        #content p { margin-bottom: 1em; line-height: 1.7; }
+        #content ul, #content ol { padding-left: 1.5em; margin-bottom: 1em; }
+        #content code { background: rgba(255,255,255,0.08); padding: 2px 5px; border-radius: 4px; font-family: monospace; }
+        #content pre { background: rgba(0,0,0,0.3); padding: 16px; border-radius: 12px; margin-bottom: 1.5em; overflow-x: auto; border: 1px solid rgba(255,255,255,0.08); }
+        .mermaid { background: white; padding: 20px; border-radius: 12px; margin: 20px 0; display: flex; justify-content: center; }
+    </style>
+</head>
+<body>
+    <div class="proposal-container">
+        <div id="content"></div>
+    </div>
+
+    <script id="raw-content" type="text/markdown">{{ content | safe }}</script>
+
+    <script>
+        mermaid.initialize({ startOnLoad: false, theme: 'default' });
+        
+        const rawContent = document.getElementById('raw-content').textContent;
+        const renderer = new marked.Renderer();
+        
+        renderer.code = function(code, language) {
+            if (language === 'mermaid') {
+                return `<div class="mermaid">${code}</div>`;
+            }
+            return `<pre><code class="language-${language}">${code}</code></pre>`;
+        };
+
+        document.getElementById('content').innerHTML = marked.parse(rawContent, { renderer: renderer });
+        
+        mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+    </script>
+</body>
+</html>
